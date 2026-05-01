@@ -1,4 +1,4 @@
-/* /assets/js/pumth-system-notice.js — PUM-TH.COM System Notice (Light Theme + Risk Disclosure) | requires SweetAlert2 */
+/* /assets/js/pumth-system-notice.js — PUM-TH.COM System Notice (Dark+Gold + Risk Disclosure) | requires SweetAlert2 */
 (function () {
   if (window.__PUMTH_SYSTEM_NOTICE_V1__) return;
   window.__PUMTH_SYSTEM_NOTICE_V1__ = true;
@@ -6,18 +6,18 @@
   const PUM = {
     siteName: "PUM-TH.COM",
 
-    // Theme (Light + Blue accent)
-    primary: "#5B6FED",
-    primaryDark: "#4F63E0",
-    text: "#1F2937",
-    muted: "#6B7280",
-    fine: "#9CA3AF",
-    bg: "#FFFFFF",
-    rowBg: "#FFFFFF",
-    rowBorder: "rgba(17,24,39,.08)",
+    // Theme (Dark + Gold to match site)
+    gold: "#EDC532",
+    goldDark: "#D4AE1F",
+    text: "#F3F4F6",
+    muted: "#B9C0CC",
+    fine: "#8B92A0",
+    bg: "#2a2a2f",
+    rowBg: "rgba(255,255,255,.035)",
+    rowBorder: "rgba(255,255,255,.08)",
 
     // Behavior
-    releaseTag: "pumth-2026-05-01-light",
+    releaseTag: "pumth-2026-05-01-dark",
     cacheKey: "pumth_system_notice_cache",
     cacheMs: 180 * 60 * 1000, // 3 ชม.
     gateSec: 4,
@@ -26,11 +26,11 @@
     title: "ประกาศสำคัญเกี่ยวกับระบบ",
     subtitle: "แพลตฟอร์มมีการอัปเดตใหญ่ โปรดอ่านเพื่อสิทธิประโยชน์ของท่าน",
     items: [
-      { icon: "chart-down", color: "#EF4444", tint: "#FEE2E2", text: "ยอดอาจลดลงได้ถึง 100% ตามสถานการณ์แพลตฟอร์ม" },
-      { icon: "shield",     color: "#3B82F6", tint: "#DBEAFE", text: 'บริการ "มีรับประกัน" ยอดก็สามารถลดลงได้เช่นกัน' },
-      { icon: "ban",        color: "#EF4444", tint: "#FEE2E2", text: 'บริการ "ไม่มีเติมยอด" จะไม่เติมให้ทุกกรณี' },
-      { icon: "hourglass",  color: "#F59E0B", tint: "#FEF3C7", text: 'บริการ "มีเติมยอดฟรี" เติมให้เฉพาะในช่วงรับประกัน' },
-      { icon: "warning",    color: "#F59E0B", tint: "#FEF3C7", text: "หากยอมรับความเสี่ยงไม่ได้ แนะนำหยุดสั่งซื้อชั่วคราว" },
+      { icon: "chart-down", color: "#FCA5A5", tint: "rgba(239,68,68,.16)",  text: "ยอดอาจลดลงได้ถึง 100% ตามสถานการณ์แพลตฟอร์ม" },
+      { icon: "shield",     color: "#93C5FD", tint: "rgba(59,130,246,.16)", text: 'บริการ "มีรับประกัน" ยอดก็สามารถลดลงได้เช่นกัน' },
+      { icon: "ban",        color: "#FCA5A5", tint: "rgba(239,68,68,.16)",  text: 'บริการ "ไม่มีเติมยอด" จะไม่เติมให้ทุกกรณี' },
+      { icon: "hourglass",  color: "#FCD34D", tint: "rgba(245,158,11,.16)", text: 'บริการ "มีเติมยอดฟรี" เติมให้เฉพาะในช่วงรับประกัน' },
+      { icon: "warning",    color: "#FCD34D", tint: "rgba(245,158,11,.16)", text: "หากยอมรับความเสี่ยงไม่ได้ แนะนำหยุดสั่งซื้อชั่วคราว" },
     ],
     finePrint: "การกดปิดหรือรับทราบ ถือว่าท่านยอมรับเงื่อนไขและเข้าใจความเสี่ยงแล้ว",
     actionText: "รับทราบและยอมรับความเสี่ยง",
@@ -45,13 +45,11 @@
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#039;");
 
-  // Home only
   function isHome() {
     const p = window.location.pathname || "/";
     return p === "/" || p === "" || p === "/index.php";
   }
 
-  // Login detector (รองรับหลายธีม)
   function readUsername() {
     const groups = [
       [".totals-block__card", ".fas.fa-user, .fa-user", ".totals-block__count-value"],
@@ -74,7 +72,6 @@
         const raw = (el.innerText || el.textContent || "").trim();
         const u = raw.replace(/\s+/g, "");
         if (!u) continue;
-
         if (/^[\d,]+$/.test(u)) continue;
         if (/^฿/.test(u)) continue;
         if (u.length > 40) continue;
@@ -92,17 +89,12 @@
     try {
       const raw = localStorage.getItem(PUM.cacheKey);
       return raw ? JSON.parse(raw) : null;
-    } catch (_) {
-      return null;
-    }
+    } catch (_) { return null; }
   }
 
   function saveCache() {
     try {
-      localStorage.setItem(
-        PUM.cacheKey,
-        JSON.stringify({ v: PUM.releaseTag, ts: Date.now() })
-      );
+      localStorage.setItem(PUM.cacheKey, JSON.stringify({ v: PUM.releaseTag, ts: Date.now() }));
     } catch (_) {}
   }
 
@@ -113,7 +105,6 @@
     return Date.now() - c.ts >= PUM.cacheMs;
   }
 
-  // ------- Icons -------
   function iconSvg(name) {
     switch (name) {
       case "chart-down":
@@ -142,22 +133,25 @@
       .pumNotice{font-family:Prompt,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;position:relative}
       .swal2-popup.pumNotice__popup{
         padding:0!important;border-radius:22px!important;overflow:hidden!important;
-        background:${PUM.bg}!important;border:0!important;
-        box-shadow:0 24px 88px rgba(17,24,39,.18)!important;
+        background:${PUM.bg}!important;
+        border:1px solid rgba(255,255,255,.08)!important;
+        box-shadow:0 24px 88px rgba(0,0,0,.55)!important;
         max-width:min(480px,92vw)!important;
       }
-      .swal2-html-container{margin:0!important;padding:0!important}
+      .swal2-html-container{margin:0!important;padding:0!important;color:${PUM.text}!important}
       .swal2-close{display:none!important}
 
       .pumNotice__close{
         position:absolute;top:14px;right:14px;
         width:32px;height:32px;border-radius:50%;
-        border:1.5px solid #FCA5A5;background:#fff;color:#EF4444;
-        cursor:pointer;display:grid;place-items:center;
+        border:1.5px solid rgba(248,113,113,.55);
+        background:rgba(248,113,113,.10);
+        color:#FCA5A5;cursor:pointer;
+        display:grid;place-items:center;
         transition:background .15s,transform .15s;
         z-index:10;padding:0;
       }
-      .pumNotice__close:hover{background:#FEE2E2;transform:scale(1.05)}
+      .pumNotice__close:hover{background:rgba(248,113,113,.22);transform:scale(1.05)}
       .pumNotice__close svg{width:16px;height:16px}
 
       .pumNotice__head{padding:22px 22px 14px;text-align:left}
@@ -174,7 +168,6 @@
         border:1px solid ${PUM.rowBorder};
         border-radius:14px;
         background:${PUM.rowBg};
-        box-shadow:0 1px 2px rgba(17,24,39,.04);
       }
       .pumNotice__ic{
         width:32px;height:32px;border-radius:50%;
@@ -193,15 +186,15 @@
       }
       .pumNotice__btn{
         width:100%;padding:14px 20px;border:0;border-radius:14px;
-        background:${PUM.primary};color:#fff;
-        font-size:15px;font-weight:700;cursor:pointer;
+        background:${PUM.gold};color:#141414;
+        font-size:15px;font-weight:800;cursor:pointer;
         transition:background .15s,transform .05s;
-        font-family:inherit;
-        box-shadow:0 8px 20px rgba(91,111,237,.25);
+        font-family:inherit;letter-spacing:.2px;
+        box-shadow:0 8px 22px rgba(237,197,50,.22);
       }
-      .pumNotice__btn:hover:not(:disabled){background:${PUM.primaryDark}}
+      .pumNotice__btn:hover:not(:disabled){background:${PUM.goldDark}}
       .pumNotice__btn:active:not(:disabled){transform:translateY(1px)}
-      .pumNotice__btn:disabled{opacity:.6;cursor:not-allowed;box-shadow:none}
+      .pumNotice__btn:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
     `;
     document.head.appendChild(st);
   }
@@ -251,7 +244,7 @@
       showConfirmButton: false,
       allowOutsideClick: false,
       allowEscapeKey: false,
-      backdrop: "rgba(17,24,39,.55)",
+      backdrop: "rgba(0,0,0,.70)",
       customClass: { popup: "pumNotice__popup" },
       didOpen: (root) => {
         const btn = root.querySelector("#pumthAckBtn");
@@ -273,7 +266,7 @@
         };
 
         btn.onclick = accept;
-        closeBtn.onclick = accept; // กดปิด = ยอมรับ (ตาม fine print)
+        closeBtn.onclick = accept;
       },
     });
   }
@@ -303,7 +296,6 @@
     boot();
   }
 
-  // Optional debug handle
   window.PUMTH_SystemNotice = {
     show: openNotice,
     clear: () => localStorage.removeItem(PUM.cacheKey),
